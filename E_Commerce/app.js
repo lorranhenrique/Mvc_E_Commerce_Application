@@ -1,8 +1,9 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var morgan = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -14,14 +15,21 @@ var carrinhoRouter = require('./routes/carrinho');
 
 var app = express();
 
+const dbURI = "mongodb+srv://lorrao:test1234@ecommercecluster.dgrvew8.mongodb.net/ECommerce?appName=EcommerceCluster";
+
+mongoose.connect(dbURI)
+  .then((result) => console.log('connected to data base'))
+  .catch((err) => console.log(err))
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
