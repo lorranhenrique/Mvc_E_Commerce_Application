@@ -1,0 +1,35 @@
+.nav-bar {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: flex-start;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-bar a {
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-bar a:hover:not(.active) {
+            background-color: #444;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .nav-bar a.active {
+            background-color: #04AA6D;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-bar a:nth-child(3) {
+            margin-left: auto;
+        }

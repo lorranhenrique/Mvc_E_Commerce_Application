@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|VT323&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="stylesheets/navbar.css">
+</head>
+<body>
+    <nav class = 'nav-bar'>
+        <a href="/" class="<%= typeof path !== 'undefined' && path === '/index' ? 'active' : '' %>">Home</a>
+        <a href="/produtos" class="<%= typeof path !== 'undefined' && path === '/produtos' ? 'active' : '' %>">Produtos</a>
+        <a href="/carrinho" class="<%= typeof path !== 'undefined' && path === '/carrinho' ? 'active' : '' %>">Carrinho</a>
+        <a href="/login" class="<%= typeof path !== 'undefined' && path === '/login' ? 'active' : '' %>">Logar-se</a>
+        <a href="/cadastro" class="<%= typeof path !== 'undefined' && path === '/cadastro' ? 'active' : '' %>">Cadastrar-se</a>
+    </nav>
+</body>
+</html>

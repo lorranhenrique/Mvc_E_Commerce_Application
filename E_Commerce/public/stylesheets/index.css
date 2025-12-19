@@ -1,0 +1,93 @@
+body{
+            background-color: #191731ff;
+            background-image: url('../images/Background.jpg');
+        }
+
+        .titulo
+        {
+            margin-top: 10px;
+            text-align: center;
+            font-size:25px;
+            background-color: #23254bff;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Press Start 2P', monospace;
+            padding: 1px;
+        }
+
+        .produto1 img {
+            max-width: 100%; 
+            height: auto; 
+            width: 100%; 
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #ff3e98ff;
+        }
+
+        .produto1 {
+            max-width: 600px;
+        }
+
+        .titulo-produto{
+            color: white;
+            font-size: 30px;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .text-produto{
+            color: white;
+            font-size: 24px;
+        }
+
+        .produto {
+            display: flex;
+            align-items: center; 
+            flex-wrap: wrap; 
+            margin-bottom: 40px; 
+            max-width: 1000px; 
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #23254bff;
+            text-decoration: none;
+        }
+
+        .produto:hover {
+             max-width: 60%; 
+             border-style:solid;
+             border-color: #aa1faaff;
+        }
+
+        .imagem-produto {
+            flex: 1; 
+            min-width: 300px; 
+            padding: 10px;
+        }
+
+        .detalhes-produto {
+            flex: 1.5; 
+            padding: 10px;
+        }
+
+        .imagem-produto img {
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #ff3e98ff;
+        }
+
+        .produto-invertido {
+            flex-direction: row-reverse; 
+        }
+
+        .footer{
+            background-color: #0c0c18ff;
+            padding: 10px;
+            border-radius: 10px
+        }
+
+        .infos{
+            color: white;
+        }
