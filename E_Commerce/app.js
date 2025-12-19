@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var produtosRouter = require('./routes/produtos');
-var cadastroRouter = require('./routes/cadastro');
-var loginRouter = require('./routes/login');
-var pagamentoRouter = require('./routes/pagamento');
-var carrinhoRouter = require('./routes/carrinho');
+var indexRouter = require('./routes/indexRoutes');
+var usersRouter = require('./routes/usersRoutes');
+var produtosRouter = require('./routes/produtosRoutes');
+var cadastroRouter = require('./routes/cadastroRoutes');
+var loginRouter = require('./routes/loginRoutes');
+var pagamentoRouter = require('./routes/pagamentoRoutes');
+var carrinhoRouter = require('./routes/carrinhoRoutes');
 
 var app = express();
 
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
