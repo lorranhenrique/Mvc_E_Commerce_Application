@@ -1,15 +1,25 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
-const createUser = (req,res)=>{
-    const user = new User(req.body);
+const createUser = async (req, res) => {
+    try {
+        const { nome, email, senha } = req.body;
+        const salt = await bcrypt.genSalt(10);
+        const senhaCriptografada = await bcrypt.hash(senha, salt);
 
-    user.save()
-        .then(()=>{
+        const user = new User({
+            nome: nome.trim().toLowerCase(),
+            email: email.trim().toLowerCase(),
+            senha: senhaCriptografada
+        });
+
+        await user.save();
         res.redirect('/');
-        })
-        .catch((err)=>{
-        console.log(err);
-        })
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Erro ao cadastrar usuário.");
+    }
 }
 
 module.exports = {
