@@ -1,9 +1,8 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const loginIndex = (req,res)=>{
-    res.render('login',{path: '/login'});
-}
+const createToken = (id) => jwt.sign({id}, 'segredo', {expiresIn: 200*60*50})
 
 const loginUser = async (req, res) => {
     let { email, senha } = req.body;
@@ -18,8 +17,11 @@ const loginUser = async (req, res) => {
 
         const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
-        if (senhaCorreta) {
-            return res.redirect('/');
+        if (senhaCorreta) 
+        {
+            const token = createToken(usuario._id);
+            res.cookie('jwt', token, { httpOnly: true, maxAge: 200*60*50});
+            return res.redirect(`/?token=${token}, user=${usuario}`);
         } 
         return res.redirect('/login?error=LoginError');
         
@@ -28,6 +30,8 @@ const loginUser = async (req, res) => {
         return res.status(500).send('Erro interno');
     }
 }
+
+const loginIndex = (req,res) => res.render('login',{path: '/login'});
 
 module.exports = {
     loginIndex,

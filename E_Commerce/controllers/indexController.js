@@ -1,10 +1,11 @@
 const User = require('../models/user');
 const Product = require('../models/product');
 
-const acessProducts = (req, res) =>{
-    res.render('produtos',{path: "/produtos"});
+
+const acessIndex = (req, res) =>{
+    res.render('index',{path: "/index"});
 }
 
 module.exports = {
-    acessProducts,
+    acessIndex,
 }

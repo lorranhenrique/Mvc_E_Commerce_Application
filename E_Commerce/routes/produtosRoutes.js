@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var {requireAuth} = require('../middlewares/authMiddleware')
+var produtosController = require('../controllers/produtosController')
 
-router.get('/', function(req, res, next) {
-  res.render('produtos',{path: '/produtos'});
-});
+router.get('/',requireAuth,produtosController.acessProducts);
 
 module.exports = router;
