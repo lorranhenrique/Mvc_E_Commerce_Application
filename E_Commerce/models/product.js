@@ -13,6 +13,10 @@ const productSchema = new Schema({
     preco: {
         type: Number,
         required: true
+    },
+    imgUrl: {
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 

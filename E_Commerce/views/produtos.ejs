@@ -13,8 +13,45 @@
 
     <h1 class="titulo">Nossos Produtos</h1>
 
-    <footer class = 'footer'>
-        <div class = 'infos'>
+    <div style="max-width: 1000px; margin: 20px auto; padding: 10px; background-color: #23254bff; border-radius: 10px;">
+        <form action="/produtos" method="get" style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" name="search" placeholder="Buscar produto" value="" style="flex-grow: 1; padding: 10px; border-radius: 5px; border: none;">
+            
+            <select name="order" style="padding: 10px; border-radius: 5px; border: none;">
+                <option value="nome_asc" <%= %>>Nome (A-Z)</option>
+                <option value="nome_desc" <%= %>>Nome (Z-A)</option>
+                <option value="preco_asc" <%= %>>Preço (Menor)</option>
+                <option value="preco_desc" <%= %>>Preço (Maior)</option>
+            </select>
+            
+            <button type="submit" style="padding: 10px 15px; border-radius: 5px; border: none; background-color: #ff3e98ff; color: white; cursor: pointer;">Buscar</button>
+            
+            <a href="/produtos" style="padding: 10px 15px; text-decoration: none; color: white;">Limpar</a>
+        </form>
+    </div>
+
+    <div>
+        <% if (produtos && produtos.length > 0) { %>
+            <% produtos.forEach(produto => { %>
+                <a href="/produto/<%= produto._id %>" class="produto">
+                    <div class="imagem-produto">
+                        <img src="<%= produto.imgUrl%>" alt="<%= produto.nome %>">
+                    </div>
+                    <div class="detalhes-produto">
+                        <h2 class="titulo-produto"><%= produto.nome %></h2>
+                        <p class="text-produto">Preço: <%= produto.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2}) %>R$</p>
+                        <p class="text-produto">Estoque: <strong><%= produto.quantidade %></strong></p>
+                    </div>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <p class="titulo-produto" style="text-align: center;">Nenhum produto encontrado.</p>
+        <% } %>
+    </div>
+
+        
+    <footer class="footer">
+        <div class="infos">
             <h2>CONTATOS</h2>
             <p>Contato: 32 9888888888</p>
             <p>Email: Contato@gmail.com</p>
