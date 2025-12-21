@@ -1,0 +1,111 @@
+body {
+            background-color: #191731ff;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .titulo-produto-detalhe {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 30px;
+            background-color: #23254bff;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Press Start 2P', monospace;
+            padding: 10px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 40px;
+        }
+        
+        .detalhe-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .produto-info {
+            display: flex;
+            gap: 40px;
+            background-color: #23254bff;
+            padding: 20px;
+            border-radius: 10px;
+            align-items: flex-start;
+        }
+
+        .produto-imagem {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .produto-imagem img {
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #ff3e98ff;
+            display: block;
+        }
+
+        .produto-descricao {
+            flex: 2;
+        }
+
+        .produto-descricao h2 {
+            color: #ff3e98ff;
+            font-size: 24px;
+            border-bottom: 2px solid #aa1faaff;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        .produto-descricao p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .preco {
+            font-size: 36px !important; 
+            color: #aa1faaff !important;
+            font-weight: bold;
+            margin-top: 15px !important;
+        }
+
+        .botao-comprar {
+            background-color: #ff3e98ff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .botao-comprar:hover {
+            background-color: #aa1faaff;
+        }
+
+        @media (max-width: 768px) {
+            .produto-info {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+            
+            .produto-imagem {
+                max-width: 100%;
+            }
+
+            .titulo-produto-detalhe {
+                font-size: 20px;
+            }
+        }

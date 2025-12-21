@@ -2,9 +2,76 @@ const User = require('../models/user');
 const Product = require('../models/product');
 
 const acessProducts = (req, res) =>{
-    res.render('produtos',{path: "/produtos"});
+    
+    const search = req.query.search;
+    const order = req.query.order;
+
+    let filtro = {};
+    if (search) {
+        filtro = {
+            $or: [
+                { nome: { $regex: search, $options: 'i' } },
+                { descricao: { $regex: search, $options: 'i' } }
+            ]
+        };
+    }
+
+    let ordenacao = {};
+    switch (order) {
+        case 'nome_asc':
+            ordenacao = { nome: 1 };
+            break;
+        case 'nome_desc':
+            ordenacao = { nome: -1 };
+            break;
+        case 'preco_asc':
+            ordenacao = { preco: 1 };
+            break;
+        case 'preco_desc':
+            ordenacao = { preco: -1 };
+            break;
+        default:
+            ordenacao = { _id: 1 }; 
+            break;
+    }
+
+    Product.find(filtro)
+        .sort(ordenacao)
+        .then((result) => {
+            res.render('produtos', { 
+                path: "/produtos", 
+                produtos: result, 
+                search: search, 
+                order: order 
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Erro ao processar os produtos");
+        });
+}
+
+const createProduto = async (req, res) =>{
+    try {
+        const { nome, quantidade, preco, imgUrl } = req.body;
+
+        const produto = new Product({
+            nome: nome.trim().toLowerCase(),
+            quantidade: quantidade,
+            preco: preco,
+            imgUrl: imgUrl
+        });
+
+        await produto.save();
+        res.redirect('/');
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Erro ao cadastrar produto.");
+    }
 }
 
 module.exports = {
     acessProducts,
+    createProduto
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Title</title>
+
+    <link rel="stylesheet" href="/stylesheets/produto.css">
+
+</head>
+<body>
+    <%- include('components/NavBar') %>
+
+    <div class="produto-info">
+        <div class="produto-imagem">
+            <img src="/images/<%= produto.imgUrl %>" alt="<%= produto.nome %>">
+        </div>
+
+        <div class="produto-descricao">
+            <h2>Nome</h2>
+            <p><%= produto.nome || 'Sem nome disponível.' %></p>
+
+            <h2>Quantidade</h2>
+            <p class="quantidade">
+                <%= produto.quantidade %>
+            </p>
+
+            <h2>Preço</h2>
+            <p class="preco">
+                <%= produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+            </p>
+
+            <button class="botao-comprar">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="infos">
+            <h2>CONTATOS</h2>
+            <p>Contato: 32 9888888888</p>
+            <p>Email: Contato@gmail.com</p>
+            <p>CNPJ: 123.44444.556</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -4,5 +4,6 @@ var {requireAuth} = require('../middlewares/authMiddleware')
 var produtosController = require('../controllers/produtosController')
 
 router.get('/',requireAuth,produtosController.acessProducts);
+router.post('/', produtosController.createProduto);
 
 module.exports = router;
