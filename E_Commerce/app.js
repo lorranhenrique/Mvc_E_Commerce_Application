@@ -13,6 +13,7 @@ var loginRouter = require('./routes/loginRoutes');
 var pagamentoRouter = require('./routes/pagamentoRoutes');
 var carrinhoRouter = require('./routes/carrinhoRoutes');
 var produtoRouter = require('./routes/produtoRoutes');
+var policyRouter = require('./routes/policyRoutes');
 
 var app = express();
 app.use(express.static('public'));
@@ -40,6 +41,7 @@ app.use('/login', loginRouter);
 app.use('/pagamento', pagamentoRouter);
 app.use('/carrinho', carrinhoRouter);
 app.use('/produto', produtoRouter);
+app.use('/policy', policyRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

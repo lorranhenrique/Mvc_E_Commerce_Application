@@ -1,0 +1,92 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    .footer {
+    background-color: #19152b;
+    color: white;
+    padding: 60px 0 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.infos h2, .social-medias h2 {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    color: #f312b0;
+}
+
+.social-medias {
+    text-align: right;
+}
+
+.icons {
+    display: flex;
+    gap: 25px;
+    justify-content: flex-end;
+}
+
+.icon-link {
+    color: white;
+    font-size: 35px;
+    transition: all 0.3s ease;
+}
+
+.icon-link.whatsapp:hover { color: #25d366; transform: scale(1.2); }
+.icon-link.instagram:hover { color: #e1306c; transform: scale(1.2); }
+.icon-link.facebook:hover { color: #1877f2; transform: scale(1.2); }
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    .social-medias, .icons {
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+</style>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="infos">
+            <h2>CONTATOS</h2>
+            <p><i class="fas fa-phone"></i> 32 98888-8888</p>
+            <p><i class="fas fa-envelope"></i> contato@gmail.com</p>
+            <p><i class="fas fa-file-invoice"></i> CNPJ: 123.444.444/0001-56</p>
+            <a href="/policy" style="color: rgb(255, 0, 119); font: bold;">POLITICA DE TROCAS</a>
+        </div>
+
+        <div class="social-medias">
+            <h2>NOSSAS REDES</h2>
+            <div class="icons">
+                <a href="#" class="icon-link whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="icon-link instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="icon-link facebook"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2025 GameStore - Todos os direitos reservados.
+    </div>
+</footer>

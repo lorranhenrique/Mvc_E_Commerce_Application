@@ -4,6 +4,6 @@ const User = require('../models/user');
 const indexController = require('../controllers/indexController')
 const {requireAuth} = require('../middlewares/authMiddleware');
 
-router.get('/',requireAuth, indexController.acessIndex);
+router.get('/', indexController.acessIndex);
 
 module.exports = router;
