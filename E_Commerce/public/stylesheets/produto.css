@@ -90,6 +90,16 @@ body {
             font-weight: bold;
         }
 
+        .botao-retorno{
+            color: rgb(211, 21, 94); 
+            padding-top: 100px;
+        }
+
+        .botao-retorno:hover{
+            color: rgb(255, 0, 191);
+            font-size: 20px;
+        }
+
         .botao-comprar:hover {
             background-color: #aa1faaff;
         }

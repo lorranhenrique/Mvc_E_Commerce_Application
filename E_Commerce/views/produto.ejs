@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Title</title>
+    <title>Produto</title>
 
     <link rel="stylesheet" href="/stylesheets/produto.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 <body>
     <%- include('components/NavBar') %>
 
-    <div class="produto-info">
+
+    <div class="produto-info" style="padding-top: 150px; margin-top: 120px;">
+
+        <a href="javascript:history.back()" class="botao-retorno"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+
         <div class="produto-imagem">
+            
             <img src="/images/<%= produto.imgUrl %>" alt="<%= produto.nome %>">
         </div>
 
