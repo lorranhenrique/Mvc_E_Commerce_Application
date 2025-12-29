@@ -7,14 +7,17 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|VT323&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/stylesheets/navbar.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <nav class = 'nav-bar'>
-        <a href="/" class="<%= typeof path !== 'undefined' && path === '/index' ? 'active' : '' %>">Home</a>
+        <a href="/" class="<%= typeof path !== 'undefined' && path === '/index' ? 'active' : '' %>"><i class="fa-solid fa-house fa-xl"></i></a>
         <a href="/produtos" class="<%= typeof path !== 'undefined' && path === '/produtos' ? 'active' : '' %>">Produtos</a>
-        <a href="/carrinho" class="<%= typeof path !== 'undefined' && path === '/carrinho' ? 'active' : '' %>">Carrinho</a>
-        <a href="/login" class="<%= typeof path !== 'undefined' && path === '/login' ? 'active' : '' %>">Logar-se</a>
-        <a href="/cadastro" class="<%= typeof path !== 'undefined' && path === '/cadastro' ? 'active' : '' %>">Cadastrar-se</a>
+        <a href="/carrinho" class="<%= typeof path !== 'undefined' && path === '/carrinho' ? 'active' : '' %>"><i class="fa-solid fa-cart-shopping fa-xl"></i> <%= typeof quantidadeCarrinho !== 'undefined' ? quantidadeCarrinho : 0 %> </a>
+        <a href="/login" class="<%= typeof path !== 'undefined' && path === '/login' ? 'active' : '' %>"><i class="fa-solid fa-arrow-right-to-bracket fa-xl"></i> Entrar</a>
+        <!-- <a href="/cadastro" class="<%= typeof path !== 'undefined' && path === '/cadastro' ? 'active' : '' %>">Cadastrar-se</a> -->
+        <a href="/login/logout"><i class="fa-solid fa-person-walking-arrow-right fa-xl"></i> Sair</a>
     </nav>
 </body>
 </html>

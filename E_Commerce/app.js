@@ -4,6 +4,7 @@ var path = require('path');
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
+var session = require('express-session');
 
 var indexRouter = require('./routes/indexRoutes');
 var usersRouter = require('./routes/usersRoutes');
@@ -13,9 +14,20 @@ var loginRouter = require('./routes/loginRoutes');
 var pagamentoRouter = require('./routes/pagamentoRoutes');
 var carrinhoRouter = require('./routes/carrinhoRoutes');
 var produtoRouter = require('./routes/produtoRoutes');
+var policyRouter = require('./routes/policyRoutes');
+
+
 
 var app = express();
 app.use(express.static('public'));
+
+app.use(cookieParser());
+app.use(session({
+  secret: 'segredo',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 const dbURI = "mongodb+srv://lorrao:test1234@ecommercecluster.dgrvew8.mongodb.net/ECommerce?appName=EcommerceCluster";
 
@@ -32,6 +44,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    if (!req.session.carrinho) {
+        req.session.carrinho = [];
+    }
+    const total = req.session.carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+    res.locals.quantidadeCarrinho = total;
+    next();
+});
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/produtos', produtosRouter);
@@ -40,6 +60,8 @@ app.use('/login', loginRouter);
 app.use('/pagamento', pagamentoRouter);
 app.use('/carrinho', carrinhoRouter);
 app.use('/produto', produtoRouter);
+app.use('/policy', policyRouter);
+
 
 app.use(function(req, res, next) {
   next(createError(404));

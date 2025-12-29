@@ -11,7 +11,8 @@
 <body>
     <%- include('components/NavBar') %>
 
-    <div class = 'titulo'>
+    <br>
+    <div class = 'titulo' style="max-width: 1300px; margin: auto;">
         <h2>PRONTO PARA A SUA PRÓXIMA</h2> 
         <h1 style = 'color: orange'>GRANDE</h1> 
         <h2>AVENTURA?</h2>
@@ -19,7 +20,7 @@
 
     <div class='produtos'>
     
-    <a href="" class='produto'> <div class="imagem-produto">
+    <a href="/produto/69474efb9b385ef9efe3106f" class='produto'> <div class="imagem-produto">
             <img src="images\celesteImg.jpg">
         </div>
         <div class="detalhes-produto">
@@ -31,7 +32,7 @@
         </div>
     </a>
 
-    <a href="" class='produto produto-invertido'> 
+    <a href="/produto/69474e6b9b385ef9efe3106b" class='produto produto-invertido'> 
         <div class="imagem-produto">
             <img src="images\Hollow.png">
         </div>
@@ -44,7 +45,7 @@
         </div>
     </a>
 
-    <a href="" class='produto'> 
+    <a href="/produto/69474f389b385ef9efe31071" class='produto'> 
         <div class="imagem-produto">
             <img src="images\Evans.png">
         </div>
@@ -59,15 +60,8 @@
     </a>
 </div>
 
-<footer class = 'footer'>
-    <div class = 'infos'>
-        <h2>CONTATOS</h2>
-        <p>Contato: 32 9888888888</p>
-        <p>Email: Contato@gmail.com</p>
-        <p>CNPJ: 123.44444.556</p>
-    </div>
-        
-</footer>
+<%- include('components/Footer') %>
+
 
 </body>
 </html>

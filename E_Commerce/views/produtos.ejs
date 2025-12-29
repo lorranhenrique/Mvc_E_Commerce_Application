@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Title</title>
+    <title>Lista de Produtos</title>
 
 <link rel="stylesheet" href="stylesheets/produtos.css">
 
@@ -11,9 +11,9 @@
 <body>
     <%- include('components/NavBar') %>
 
-    <h1 class="titulo">Nossos Produtos</h1>
+    <h1 class="titulo" style="max-width: 980px; margin: 20px auto; padding: 20px; color: rgb(216, 29, 107)">Nossos Produtos</h1>
 
-    <div style="max-width: 1000px; margin: 20px auto; padding: 10px; background-color: #23254bff; border-radius: 10px;">
+    <div style="max-width: 980px; margin: 20px auto; padding: 20px; background-color: #23254bff; border-radius: 10px;">
         <form action="/produtos" method="get" style="display: flex; gap: 10px; align-items: center;">
             <input type="text" name="search" placeholder="Buscar produto" value="" style="flex-grow: 1; padding: 10px; border-radius: 5px; border: none;">
             
@@ -50,14 +50,7 @@
     </div>
 
         
-    <footer class="footer">
-        <div class="infos">
-            <h2>CONTATOS</h2>
-            <p>Contato: 32 9888888888</p>
-            <p>Email: Contato@gmail.com</p>
-            <p>CNPJ: 123.44444.556</p>
-        </div>
-    </footer>
+    <%- include('components/Footer') %>
 
 </body>
 </html>
