@@ -1,0 +1,111 @@
+body
+{
+    background-color: #191731ff;
+    background-image: url('../images/Background.jpg');
+}
+
+.imagem-produto{
+    max-width: 300px; 
+    height: auto; 
+    width: 300px; 
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #ff3e98ff;
+}
+        
+.item-carrinho 
+{ 
+    background-color: rgb(29, 14, 41);
+    border-radius: 15px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: left; 
+    border-bottom: 5px solid #000000; 
+    padding: 20px 40px; 
+}
+
+.item-carrinho:hover
+{ 
+    background-color: rgb(44, 23, 61);
+    padding: 30px 40px; ;
+}
+   
+.total-secao 
+{ 
+    color: white;
+    text-align: right; 
+    margin-top: 20px; 
+    font-size: 1.5rem; 
+    font-family: sans-serif; 
+}
+        
+.btn-finalizar 
+{ 
+    background: #28a745; 
+    font-size: 30px;
+    color: white; 
+    padding: 15px 30px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    border: none;
+    float: right; 
+    margin-bottom: 50px;
+}
+
+.btn-finalizar:hover
+{ 
+    background: #2bd62b; 
+    font-size: 31px;
+}
+
+.text-data{
+    color: white;
+    font-family: sans-serif; 
+    font-size: 25px;
+}
+
+.title-data{
+    background-color:rgb(29, 14, 41);
+    border-bottom: 5px solid #000000;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    font-family: sans-serif; 
+    font-size: 40px;
+    text-align: center;
+}
+
+.btn-remover{
+    background: #57256b; 
+    font-size: 10px;
+    color: white; 
+    padding: 15px 15px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    border: none;
+    float: right; 
+}
+
+.btn-remover:hover{
+    background: #8735a8; 
+    font-size: 11px;
+}
+
+.link-retorno{
+    color: rgb(255, 46, 144);
+    font-family: sans-serif; 
+    text-align: center;
+    font-size: 40px; 
+    justify-content: center;
+    font-family: 'Press Start 2P', monospace;
+    text-decoration: none;
+    background-color: #3b0a3f;
+    padding: 10px 10px 10px;
+    border-radius: 10px;
+}
+
+.link-retorno:hover{
+    color: rgb(255, 46, 144);
+    font-size: 42px;
+    background-color: #690c55;
+    padding: 12px 12px 12px;
+}

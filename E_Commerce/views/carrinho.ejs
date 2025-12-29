@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Carrinho</title>
+    <link rel="stylesheet" href="/stylesheets/carrinho.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+    <%- include('components/NavBar') %>
+
+    <div class="carrinho-container">
+        <h1 class="title-data">SEU CARRINHO</h1>
+
+        <% if (carrinho.length > 0) { %>
+            <% carrinho.forEach(item => { %>
+                <div class="item-carrinho">
+                    <div>
+                        <img class="imagem-produto" src="/images/<%= item.info.imgUrl %>" alt="<%= item.info.nome %>">
+                    </div>
+                    
+                    <div class="text-data">
+                        <h3><%= item.info.nome %></h3>
+                        <p>Preço Unitário: <%= item.info.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></p>
+                    </div>
+                    <div class="text-data">
+                        <p>Qtd: <%= item.quantidade %></p>
+                        <strong>Subtotal: <%= item.subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+                    </div>
+                    <div class="form-remove">
+                        <form action="/carrinho/remover/<%=item.info._id%>" method="POST">
+                            <button class="btn-remover"><i class="fa-solid fa-trash fa-xl"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+            <% }) %>
+
+            <div class="total-secao">
+                <strong>Total Geral: <%= totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+            </div><br>
+
+            <button class="btn-finalizar">Finalizar Compra</button>
+
+        <% } else { %>
+            <p class="text-data" style="text-align: center; font-size: 50px; font-family: 'Press Start 2P', monospace; margin-top: 200px;">Seu carrinho está vazio. <br><br><a href="/produtos" class="link-retorno">Voltar às compras </a></p>
+            
+        <% } %>
+    </div>
+</body>
+</html>

@@ -36,9 +36,18 @@
                 <%= produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
             </p>
 
-            <button class="botao-comprar">Adicionar ao Carrinho</button>
+            <div class="produto-descricao">
+                <form action="/carrinho/<%= produto._id %>" method="POST">
+                    <button type="submit" class="botao-comprar">
+                        Adicionar ao Carrinho
+                    </button>
+                </form>
+            </div>
+            
         </div>
     </div>
+
+
 
 </body>
 </html>
