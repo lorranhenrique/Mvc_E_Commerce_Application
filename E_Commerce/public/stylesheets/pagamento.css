@@ -1,0 +1,105 @@
+        body {
+            background-color: #191731ff;
+            background-image: url('../images/Background.jpg');
+            color: white;
+            font-family: 'VT323', monospace;
+        }
+
+        .checkout-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .resumo-pedido {
+            flex: 1.5;
+            background-color: #23254bff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #ff3e98ff;
+        }
+
+        .opcoes-pagamento {
+            flex: 1;
+            background-color: #0c0c18ff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #aa1faaff;
+            height: fit-content;
+        }
+
+        .titulo-secao {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: #ff3e98ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .item-checkout {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .item-checkout img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ff3e98ff;
+        }
+
+        .metodo-pagamento {
+            display: block;
+            background: #23254bff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .metodo-pagamento:hover {
+            border-color: #aa1faaff;
+        }
+
+        .metodo-pagamento input {
+            margin-right: 10px;
+        }
+
+        .total-final {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
+            text-align: right;
+            margin-top: 20px;
+            color: #00ffccff;
+        }
+
+        .btn-pagar {
+            width: 100%;
+            background-color: #ff3e98ff;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-pagar:hover {
+            background-color: #aa1faaff;
+            box-shadow: 0 0 15px #aa1faaff;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container { flex-direction: column; }
+        }

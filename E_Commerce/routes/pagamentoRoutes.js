@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var pagamentoController = require("../controllers/pagamentoController");
 
-
-router.get('/', function(req, res, next) {
-  res.render('pagamento',{path: "/pagamento"});
-});
+router.post('/', pagamentoController.pagamentoIndex);
+router.post('/efetuarPagamento', pagamentoController.efetuarPagamento);
 
 module.exports = router;

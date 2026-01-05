@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Pagamento</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/pagamento.css">
+
+</head>
+<body>
+    <%- include('components/NavBar') %>
+
+    <div class="checkout-container">
+        
+        <div class="resumo-pedido">
+            <h2 class="titulo-secao">RESUMO DO PEDIDO</h2>
+            
+            <% if (carrinho.length > 0) { %>
+                <% carrinho.forEach(item => { %>
+                    <div class="item-checkout">
+                        <img src="/images/<%= item.info.imgUrl %>" alt="<%= item.info.nome %>">
+                        <div style="flex-grow: 1;">
+                            <h4 style="margin: 0; font-size: 22px;"><%= item.info.nome %></h4>
+                            <p style="margin: 0;">Qtd: <%= item.quantidade %> x <%= item.info.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></p>
+                        </div>
+                        <div style="font-size: 20px;">
+                            <%= item.subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="total-final">
+                    TOTAL: <%= totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                </div>
+            <% } else { %>
+                <p>Nenhum item encontrado.</p>
+            <% } %>
+        </div>
+
+        <div class="opcoes-pagamento">
+            <h2 class="titulo-secao">PAGAMENTO</h2>
+            <form action="/pagamento/efetuarPagamento" method="POST">
+                
+                <label class="metodo-pagamento">
+                    <input type="radio" name="metodo" value="pix" id="radio-pix" checked>
+                    <i class="fa-brands fa-pix"></i> PIX
+                </label>
+
+                <label class="metodo-pagamento">
+                    <input type="radio" name="metodo" value="cartao" id="radio-cartao">
+                    <i class="fa-solid fa-credit-card"></i> Cartão de Crédito
+                </label>
+
+                <label class="metodo-pagamento">
+                    <input type="radio" name="metodo" value="boleto" id="radio-boleto">
+                    <i class="fa-solid fa-barcode"></i> Boleto Bancário
+                </label>
+
+                <div id="form-cartao" style="margin-top: 20px; display: none; border-top: 1px solid #aa1faaff; padding-top: 15px;">
+                    <div style="margin-bottom: 10px;">
+                        <label>Nome do títular:</label>
+                        <input type="text" name="nomeTitular" minlength="3" placeholder="Nome" style="width: 96%; padding: 8px; background: #191731; border: 1px solid #aa1faaff; color: white;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label>Número do Cartão:</label>
+                        <input type="text" name="numeroCartao" placeholder="0000 0000 0000 0000" style="width: 96%; padding: 8px; background: #191731; border: 1px solid #aa1faaff; color: white;">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label>Validade:</label>
+                            <input type="text" name="validade" placeholder="MM/AA"  style="width: 96%; padding: 8px; background: #191731; border: 1px solid #aa1faaff; color: white;">
+                        </div>
+                        <div style="flex: 1; padding-left: 5px;">
+                            <label>CVV:</label>
+                            <input type="text" name="cvv" maxlength="3" placeholder="123" style="width: 92%; padding: 8px; background: #191731; border: 1px solid #aa1faaff; color: white;">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-pagar">CONFIRMAR E PAGAR</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    const radioCartao = document.getElementById('radio-cartao');
+    const formCartao = document.getElementById('form-cartao');
+    const inputNumero = document.querySelector('input[name="numeroCartao"]');
+    const inputValidade = document.querySelector('input[name="validade"]');
+    const inputCvv = document.querySelector('input[name="cvv"]');
+
+    function atualizarVisibilidade() {
+        formCartao.style.display = radioCartao.checked ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('input[name="metodo"]').forEach((radio) => {
+        radio.addEventListener('change', atualizarVisibilidade);
+    });
+
+    inputNumero.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        e.target.value = value.substring(0, 19);
+    });
+
+    inputValidade.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        e.target.value = value.substring(0, 5);
+    });
+
+    inputCvv.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+    });
+</script>
+
+</html>
