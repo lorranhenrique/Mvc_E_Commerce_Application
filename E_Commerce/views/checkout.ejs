@@ -1,0 +1,111 @@
+<style>
+    .checkout-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .checkout-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 450px;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .checkout-card h2 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .checkout-card p {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    #walletBrick_container {
+        min-height: 150px;
+    }
+
+    #loading-message {
+        color: #009ee3;
+        font-weight: bold;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
+    }
+</style>
+
+<div class="checkout-wrapper">
+    <div class="checkout-card">
+        <img src="https://www.mercadopago.com/instore/merchant/bundle/assets/img/mp-logo.png" width="150" alt="Mercado Pago" style="margin-bottom: 20px;">
+        <h2>Finalizar Compra</h2>
+        <p>Escolha sua forma de pagamento preferida de forma segura.</p>
+
+        <div id="loading-message">Carregando métodos de pagamento...</div>
+        
+        <div id="walletBrick_container"></div>
+        
+        <a href="/carrinho" style="display: block; margin-top: 20px; color: #999; text-decoration: none; font-size: 13px;">
+            ← Voltar para o carrinho
+        </a>
+    </div>
+</div>
+
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const publicKey = "<%= publicKey %>";
+        const preferenceId = "<%= preferenceId %>";
+        const loadingMsg = document.getElementById('loading-message');
+
+        if (!publicKey || !preferenceId) {
+            loadingMsg.innerHTML = "Erro ao carregar dados do pagamento.";
+            return;
+        }
+
+        const mp = new MercadoPago(publicKey, { locale: 'pt-BR' });
+        const bricksBuilder = mp.bricks();
+
+        const renderWalletBrick = async (bricksBuilder) => {
+            try {
+                await bricksBuilder.create("wallet", "walletBrick_container", {
+                    initialization: {
+                        preferenceId: preferenceId,
+                    },
+                    customization: {
+                        texts: {
+                            valueProp: 'smart_option_money',
+                        },
+                        visual: {
+                            buttonBackground: 'default', // ou 'black', 'blue'
+                            borderRadius: '6px',
+                        }
+                    },
+                    callbacks: {
+                        onReady: () => {
+                            loadingMsg.style.display = 'none'; // Esconde o loader quando o botão aparece
+                        },
+                        onError: (error) => {
+                            console.error(error);
+                            loadingMsg.innerHTML = "Erro ao carregar o botão de pagamento.";
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Erro no Brick:", e);
+            }
+        };
+        renderWalletBrick(bricksBuilder);
+    });
+</script>

@@ -1,6 +1,8 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') }); 
+
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
@@ -15,8 +17,6 @@ var pagamentoRouter = require('./routes/pagamentoRoutes');
 var carrinhoRouter = require('./routes/carrinhoRoutes');
 var produtoRouter = require('./routes/produtoRoutes');
 var policyRouter = require('./routes/policyRoutes');
-
-
 
 var app = express();
 app.use(express.static('public'));
