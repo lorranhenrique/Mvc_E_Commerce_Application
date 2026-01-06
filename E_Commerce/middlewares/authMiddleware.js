@@ -12,6 +12,7 @@ const requireAuth = (req, res, next) => {
         if (err) {
             res.status(401).send('<script>alert("Token Inválido"); window.location.href = "/login";</script>');
         } 
+        req.user = decodedToken;
         next();
     });
 };

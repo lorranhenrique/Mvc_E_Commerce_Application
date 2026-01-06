@@ -41,7 +41,11 @@
                 <strong>Total Geral: <%= totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
             </div><br>
 
-            <button class="btn-finalizar">Finalizar Compra</button>
+            <form action="/pagamento" method="Post">
+                <button class="btn-finalizar">Finalizar Compra</button>
+            </form>
+
+            
 
         <% } else { %>
             <p class="text-data" style="text-align: center; font-size: 50px; font-family: 'Press Start 2P', monospace; margin-top: 200px;">Seu carrinho está vazio. <br><br><a href="/produtos" class="link-retorno">Voltar às compras </a></p>
