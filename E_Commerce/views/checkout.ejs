@@ -1,111 +1,99 @@
-<style>
-    .checkout-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 70vh;
-        padding: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+<link rel="stylesheet" href="/stylesheets/pagamento.css">
 
-    .checkout-card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 450px;
-        padding: 30px;
-        text-align: center;
-    }
-
-    .checkout-card h2 {
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .checkout-card p {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 30px;
-    }
-
-    #walletBrick_container {
-        min-height: 150px;
-    }
-
-    #loading-message {
-        color: #009ee3;
-        font-weight: bold;
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-        0% { opacity: 0.5; }
-        50% { opacity: 1; }
-        100% { opacity: 0.5; }
-    }
-</style>
-
-<div class="checkout-wrapper">
-    <div class="checkout-card">
-        <img src="https://www.mercadopago.com/instore/merchant/bundle/assets/img/mp-logo.png" width="150" alt="Mercado Pago" style="margin-bottom: 20px;">
-        <h2>Finalizar Compra</h2>
-        <p>Escolha sua forma de pagamento preferida de forma segura.</p>
-
-        <div id="loading-message">Carregando métodos de pagamento...</div>
+<div class="checkout-container">
+    <div class="opcoes-pagamento" style="max-width: 600px; margin: 0 auto; min-height: 400px;">
+        <h2 class="titulo-secao">FINALIZAR PAGAMENTO</h2>
         
-        <div id="walletBrick_container"></div>
+        <div id="loading-message" style="color: #aa1faaff; font-family: 'VT323', monospace; font-size: 22px; text-align: center; margin-top: 50px;">
+            <i class="fa-solid fa-spinner fa-spin"></i> CARREGANDO SISTEMA SEGURO...
+        </div>
         
-        <a href="/carrinho" style="display: block; margin-top: 20px; color: #999; text-decoration: none; font-size: 13px;">
-            ← Voltar para o carrinho
-        </a>
+        <div id="paymentBrick_container"></div>
+
+        <div id="pixel-pix-container" style="display: none; text-align: center; background: #191731; padding: 25px; border: 4px double #aa1faaff; margin-top: 20px;">
+            <h3 style="color: white; font-family: 'Press Start 2P'; font-size: 14px; margin-bottom: 20px;">AGUARDANDO PAGAMENTO</h3>
+            
+            <div id="qr-code-img" style="background: white; padding: 10px; display: inline-block; border: 4px solid #aa1faaff;">
+                </div>
+
+            <p style="color: #aa1faaff; font-family: 'VT323'; margin-top: 15px; font-size: 18px;">CÓDIGO COPIA E COLA:</p>
+            <textarea id="pix-code" readonly style="width: 100%; background: #000; color: #0f0; border: 1px solid #aa1faaff; font-family: monospace; font-size: 11px; height: 60px; padding: 5px; margin-bottom: 15px;"></textarea>
+            
+            <button onclick="window.location.href='/produtos'" class="btn-pagar" style="width: auto; padding: 10px 20px;">JÁ PAGUEI / CONCLUIR</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/carrinho" style="color: #aa1faaff; text-decoration: none; font-family: 'VT323', monospace; font-size: 18px;">
+                <i class="fa-solid fa-arrow-left"></i> VOLTAR AO CARRINHO
+            </a>
+        </div>
     </div>
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const publicKey = "<%= publicKey %>";
-        const preferenceId = "<%= preferenceId %>";
-        const loadingMsg = document.getElementById('loading-message');
+    const mp = new MercadoPago("TEST-a957ab76-06a5-461f-be48-c6d6d2bd7e10", { locale: 'pt-BR' });
+    const bricksBuilder = mp.bricks();
 
-        if (!publicKey || !preferenceId) {
-            loadingMsg.innerHTML = "Erro ao carregar dados do pagamento.";
-            return;
-        }
-
-        const mp = new MercadoPago(publicKey, { locale: 'pt-BR' });
-        const bricksBuilder = mp.bricks();
-
-        const renderWalletBrick = async (bricksBuilder) => {
-            try {
-                await bricksBuilder.create("wallet", "walletBrick_container", {
-                    initialization: {
-                        preferenceId: preferenceId,
-                    },
-                    customization: {
-                        texts: {
-                            valueProp: 'smart_option_money',
-                        },
-                        visual: {
-                            buttonBackground: 'default', // ou 'black', 'blue'
-                            borderRadius: '6px',
-                        }
-                    },
-                    callbacks: {
-                        onReady: () => {
-                            loadingMsg.style.display = 'none'; // Esconde o loader quando o botão aparece
-                        },
-                        onError: (error) => {
-                            console.error(error);
-                            loadingMsg.innerHTML = "Erro ao carregar o botão de pagamento.";
-                        }
-                    }
-                });
-            } catch (e) {
-                console.error("Erro no Brick:", e);
-            }
+    const renderPaymentBrick = async (bricksBuilder) => {
+        const settings = {
+            initialization: {
+                amount: parseFloat("<%= totalGeral %>"),
+                preferenceId: "<%= preferenceId %>",
+            },
+            customization: {
+                paymentMethods: {
+                    ticket: "all",
+                    bankTransfer: "all",
+                    creditCard: "all",
+                },
+                visual: {
+                    fontFamily: "'VT323', monospace",
+                    style: { theme: 'dark' }
+                }
+            },
+            callbacks: {
+                onReady: () => {
+                    document.getElementById('loading-message').style.display = 'none';
+                },
+                onSubmit: ({ selectedPaymentMethod, formData }) => {
+                    console.log("DADOS ENVIADOS:", formData);
+                    return new Promise((resolve, reject) => {
+                        fetch("/pagamento/processar", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(formData),
+                        })
+                        .then((response) => response.json())
+                        .then((result) => {
+                            if (result.qr_code_base64) {
+                                document.getElementById('paymentBrick_container').style.display = 'none';
+                                document.getElementById('pixel-pix-container').style.display = 'block';
+                                
+                                document.getElementById('qr-code-img').innerHTML = `<img src="data:image/png;base64,${result.qr_code_base64}" style="width: 200px; display: block;">`;
+                                document.getElementById('pix-code').value = result.qr_code;
+                            } else if (result.status === 'approved') {
+                                window.location.href = "/produtos?sucesso=true";
+                            } else {
+                                alert("Pagamento Pendente ou Recusado. Status: " + result.status);
+                                window.location.href = "/produtos";
+                            }
+                            resolve();
+                        })
+                        .catch((error) => {
+                            console.error("Erro no processamento:", error);
+                            alert("Erro ao processar. Tente novamente.");
+                            reject();
+                        });
+                    });
+                },
+                onError: (error) => {
+                    console.error("Erro crítico no SDK:", error);
+                },
+            },
         };
-        renderWalletBrick(bricksBuilder);
-    });
+        window.paymentBrickController = await bricksBuilder.create("payment", "paymentBrick_container", settings);
+    };
+
+    renderPaymentBrick(bricksBuilder);
 </script>
