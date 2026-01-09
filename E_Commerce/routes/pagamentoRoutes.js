@@ -5,5 +5,6 @@ var {requireAuth} =  require("../middlewares/authMiddleware");
 
 router.post('/',requireAuth, pagamentoController.pagamentoIndex);
 router.post('/efetuarPagamento', requireAuth, pagamentoController.efetuarPagamento);
+router.post('/processar', requireAuth, pagamentoController.processarPagamento);
 
 module.exports = router;
