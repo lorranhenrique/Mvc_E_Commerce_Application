@@ -72,6 +72,43 @@ Configuração no Mercado Pago:
 
     Selecione o evento Pagamentos (payments) e salve.
 
+## 🚀 Inicializando a aplicação
+ 
+```bash
+# Rode: nodemon start
+##isso iniciará a aplicação
+```
+### Criação do primeiro usuário do sistema
+```bash
+Criar Primeiro Usuário (via Postman/Insomnia)
 
+Como as rotas de compra são protegidas, você precisa criar um usuário e logar. Utilize uma ferramenta como o Postman:
+
+    Método: POST
+
+    URL: https://localhost:3000/cadastro
+
+    Body (JSON):
+
+JSON
+
+{
+    "nome": "Test",
+    "email": "Test@gmail.com",
+    "senha": "123"
+}
+```
+
+##🕹️ Funcionamento do Sistema
+
+    Carrinho: O usuário adiciona os produtos desejados.
+
+    Checkout: O Mercado Pago processa o pagamento (Pix, Boleto ou Cartão).
+
+    Webhook: Assim que aprovado, o servidor recebe a notificação, reduz a quantidade do produto no banco de dados e busca a key correspondente.
+
+    Entrega: O sistema envia automaticamente um e-mail para o usuário logado contendo a chave do jogo.
+
+    Finalização: Ao retornar para a página de produtos, o carrinho é esvaziado automaticamente e um alerta de sucesso é exibido por 3 segundos.
 
 
