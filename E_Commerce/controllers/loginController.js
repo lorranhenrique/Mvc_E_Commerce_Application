@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
         if (senhaCorreta) 
         {
             const token = createToken(usuario._id);
-            res.cookie('jwt', token, { httpOnly: true, maxAge: 200*60*50*50000});
+            res.cookie('jwt', token, { httpOnly: true, maxAge: 200*60*50*3});
             return res.redirect(`/?token=${token}, user=${usuario}`);
         } 
         return res.redirect('/login?error=LoginError');

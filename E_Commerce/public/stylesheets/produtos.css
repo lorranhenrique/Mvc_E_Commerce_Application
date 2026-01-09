@@ -35,6 +35,12 @@ body
             font-family: 'Press Start 2P', monospace;
         }
 
+        .desc-produto{
+            color: white;
+            font-size: 20px;
+            font-family:'Times New Roman', Times, serif;
+        }
+
         .text-produto{
             color: white;
             font-size: 24px;

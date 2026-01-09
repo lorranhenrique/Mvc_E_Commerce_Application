@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Product = require('../models/product');
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+const nodemailer = require('nodemailer');
 
 const client = new MercadoPagoConfig({
     accessToken: process.env.accessToken,
@@ -103,39 +104,45 @@ const processarPagamento = async (req, res) => {
     try {
         const payment = new Payment(client);
         const { transaction_amount, payment_method_id, payer, token, installments, issuer_id } = req.body;
-        const cleanFirstName = (payer.first_name || "").trim();
-        const cleanLastName = (payer.last_name || "").trim();
+
+        const isTicketOrPix = payment_method_id === 'pix' || payment_method_id === 'bolbradesco' || payment_method_id === 'pec';
 
         const body = {
             transaction_amount: Number(transaction_amount),
             description: "Compra na Loja Gamer",
             payment_method_id,
+            external_reference: payer.email.trim(), 
             payer: {
                 email: payer.email.trim(),
-                first_name: (payer.first_name || "").trim(),
-                last_name: (payer.last_name || "").trim(),
+                first_name: (payer.first_name || "Cliente").trim(),
+                last_name: (payer.last_name || "Gamer").trim(),
                 identification: {
-                    type: "CPF",
+                    type: payer.identification?.type || "CPF",
                     number: payer.identification?.number?.replace(/\D/g, "")
                 },
                 address: {
-                    zip_code: payer.address?.zip_code?.replace(/\D/g, ""),
-                    street_name: payer.address?.street_name,
-                    street_number: payer.address?.street_number?.replace(/\D/g, "") || "SN",
-                    neighborhood: payer.address?.neighborhood,
-                    city: payer.address?.city,
-                    federal_unit: payer.address?.federal_unit
+                    zip_code: payer.address?.zip_code?.replace(/\D/g, "") || "00000000",
+                    street_name: payer.address?.street_name || "Rua",
+                    street_number: payer.address?.street_number || "SN",
+                    neighborhood: payer.address?.neighborhood || "Bairro",
+                    city: payer.address?.city || "Cidade",
+                    federal_unit: payer.address?.federal_unit || "SP"
                 }
             },
-            token: (payment_method_id === 'pix' || payment_method_id === 'bolbradesco') ? undefined : token,
-            issuer_id: (payment_method_id === 'pix' || payment_method_id === 'bolbradesco') ? undefined : issuer_id,
-            installments: Number(installments || 1)
+            token: isTicketOrPix ? undefined : token,
+            issuer_id: isTicketOrPix ? undefined : issuer_id,
+            installments: Number(installments || 1),
+            additional_info: {
+                items: req.session.carrinho.map(item => ({
+                    id: item.id,
+                    title: "Produto Gamer",
+                    quantity: item.quantity || item.quantidade,
+                    unit_price: Number(item.preco || (transaction_amount / (item.quantity || item.quantidade)))
+                }))
+            }
         };
 
         const result = await payment.create({ body });
-
-        console.log("--- RESPOSTA MP --- Status:", result.status, "| Detalhe:", result.status_detail);
-
         res.status(201).json({
             status: result.status,
             status_detail: result.status_detail,
@@ -143,23 +150,121 @@ const processarPagamento = async (req, res) => {
             transaction_details: result.transaction_details,
             qr_code: result.point_of_interaction?.transaction_data?.qr_code,
             qr_code_base64: result.point_of_interaction?.transaction_data?.qr_code_base64,
+            external_resource_url: result.transaction_details?.external_resource_url
         });
-
     } catch (err) {
-        console.error("--- ERRO NO PROCESSAMENTO ---");
-        if (err.cause && Array.isArray(err.cause)) {
-            err.cause.forEach(detalhe => {
-                console.error(`- Campo: ${detalhe.location} | Erro: ${detalhe.description}`);
-            });
-        } else {
-            console.error(err);
+        console.error("Erro Processar:", err);
+        res.status(500).json({ error: "Erro interno" });
+    }
+};
+
+const webhookPagamento = async (req, res) => {
+    try {
+        const { action, data } = req.body;
+        const paymentId = data?.id || req.query['data.id'];
+
+        console.log(`--- Notificação recebida: ID ${paymentId} ---`);
+
+        if (paymentId === "123456") {
+            console.log("Aviso: Teste de Webhook detectado (ID fictício). Tudo OK!");
+            return res.sendStatus(200);
         }
-        res.status(500).json({ error: "Erro interno", details: err.cause?.[0]?.description });
+
+        if (paymentId && (action === "payment.created" || action === "payment.updated" || req.query.type === 'payment')) {
+            const payment = new Payment(client);
+            const statusPagamento = await payment.get({ id: paymentId });
+
+            console.log("Status Real do Pagamento:", statusPagamento.status);
+
+            if (statusPagamento.status === 'approved') {
+                await finalizarOrdemDeCompra(statusPagamento);
+            }
+        }
+
+        res.sendStatus(200);
+    } catch (err) {
+        console.error("Erro no processamento do Webhook:", err.message);
+        res.sendStatus(200); 
+    }
+};
+
+const finalizarOrdemDeCompra = async (paymentData) => {
+    const userEmail = 
+        paymentData.external_reference || 
+        paymentData.payer?.email || 
+        paymentData.additional_info?.payer?.email;
+
+    const itens = paymentData.additional_info?.items || [];
+
+    console.log(`--- PROCESSANDO ENTREGA PARA: ${userEmail} ---`);
+
+    if (!userEmail) {
+        console.error("ERRO: Destinatário não encontrado no pagamento aprovado.");
+        return;
+    }
+    for (const item of itens) {
+        try {
+            const produto = await Product.findById(item.id);
+            if (produto) {
+                produto.quantidade -= Number(item.quantity);
+                await produto.save();
+                
+                await enviarEmailChave(userEmail, produto.nome, produto.key);
+                console.log(`Sucesso: Chave de ${produto.nome} enviada para ${userEmail}`);
+            }
+        } catch (error) {
+            console.error(`Erro ao entregar item ${item.id}:`, error.message);
+        }
+    }
+};
+
+async function enviarEmailChave(emailDestino, nomeJogo, chave) {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const mailOptions = {
+        from: `"Minha Loja Gamer" <${process.env.EMAIL_USER}>`,
+        to: emailDestino.trim(), 
+        subject: `Sua chave de ${nomeJogo} chegou! 🎮`,
+        html: `
+            <div style="font-family: Arial, sans-serif; color: #333;">
+                <h2 style="color: #673ab7;">Obrigado pela sua compra!</h2>
+                <p>O pagamento do jogo <strong>${nomeJogo}</strong> foi confirmado.</p>
+                <div style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 18px; border: 1px dashed #673ab7;">
+                    Sua Chave: ${chave}
+                </div>
+                <p style="font-size: 12px; color: #777; margin-top: 20px;">Se precisar de ajuda, entre em contato com nosso suporte.</p>
+            </div>
+        `
+    };
+
+    return transporter.sendMail(mailOptions);
+}
+
+const consultarStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const payment = new Payment(client);
+        const result = await payment.get({ id });
+
+        res.json({ status: result.status });
+    } catch (err) {
+        console.error("Erro ao consultar status:", err);
+        res.status(500).json({ error: "Erro ao consultar status" });
     }
 };
 
 module.exports = {
     pagamentoIndex,
     efetuarPagamento,
-    processarPagamento
+    processarPagamento,
+    webhookPagamento,
+    consultarStatus
 };

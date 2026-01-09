@@ -17,6 +17,16 @@ const productSchema = new Schema({
     imgUrl: {
         type: String,
         required: true
+    },
+    descricao: { 
+        type: String, 
+        required: false,
+        default: "" 
+    },
+    key: { 
+        type: String, 
+        required: false,
+        default: "" 
     }
 }, {timestamps: true});
 
