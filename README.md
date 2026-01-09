@@ -74,9 +74,16 @@ Configuração no Mercado Pago:
 
 ## 🚀 Inicializando a aplicação
  
+
+Rode: 
 ```bash
-# Rode: nodemon start
-##isso iniciará a aplicação
+nodemon start
+```
+isso iniciará a aplicação
+
+OBS(Rode o ngrok na pasta onde o instalou)
+```bash
+ngrok http https://localhost:3000 
 ```
 ### Criação do primeiro usuário do sistema
 ```bash
