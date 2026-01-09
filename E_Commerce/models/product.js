@@ -22,6 +22,11 @@ const productSchema = new Schema({
         type: String, 
         required: false,
         default: "" 
+    },
+    key: { 
+        type: String, 
+        required: false,
+        default: "" 
     }
 }, {timestamps: true});
 
