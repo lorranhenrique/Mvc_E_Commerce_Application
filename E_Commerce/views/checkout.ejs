@@ -1,38 +1,34 @@
 <link rel="stylesheet" href="/stylesheets/pagamento.css">
+<link rel="stylesheet" href="/stylesheets/checkout.css">
 
 <div class="checkout-container">
-    <div class="opcoes-pagamento" style="max-width: 600px; margin: 0 auto; min-height: 400px;">
+    <div class="opcoes-pagamento">
+
         <h2 class="titulo-secao">FINALIZAR PAGAMENTO</h2>
-        
-        <div id="loading-message" style="color: #aa1faaff; font-family: 'VT323', monospace; font-size: 22px; text-align: center; margin-top: 50px;">
+
+        <div id="loading-message">
             <i class="fa-solid fa-spinner fa-spin"></i> CARREGANDO SISTEMA SEGURO...
         </div>
-        
+
         <div id="paymentBrick_container"></div>
 
-        <div id="pixel-pix-container" style="display: none; text-align: center; background: #191731; padding: 25px; border: 4px double #aa1faaff; margin-top: 20px;">
-            <h3 style="color: white; font-family: 'Press Start 2P'; font-size: 14px; margin-bottom: 20px;">AGUARDANDO PAGAMENTO</h3>
-            
-            <div id="qr-code-img" style="background: white; padding: 10px; display: inline-block; border: 4px solid #aa1faaff;">
-                </div>
-
-            <p style="color: #aa1faaff; font-family: 'VT323'; margin-top: 15px; font-size: 18px;">CÓDIGO COPIA E COLA:</p>
-            <textarea id="pix-code" readonly style="width: 100%; background: #000; color: #0f0; border: 1px solid #aa1faaff; font-family: monospace; font-size: 11px; height: 60px; padding: 5px; margin-bottom: 15px;"></textarea>
-            
-            <button onclick="window.location.href='/produtos'" class="btn-pagar" style="width: auto; padding: 10px 20px;">JÁ PAGUEI / CONCLUIR</button>
+        <div id="pixel-pix-container" class="pixel-pix-container">
+            <h3 class="pixel-pix-container-h3">AGUARDANDO PAGAMENTO</h3>
+            <div id="qr-code-img"></div>
+            <p class="pixel-pix-container-p">CÓDIGO COPIA E COLA:</p>
+            <textarea id="pix-code" readonly class="pixel-pix-container-textarea"></textarea>
+            <button onclick="window.location.href='/produtos'" class="btn-pagar">JÁ PAGUEI / CONCLUIR</button>
         </div>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="/carrinho" style="color: #aa1faaff; text-decoration: none; font-family: 'VT323', monospace; font-size: 18px;">
-                <i class="fa-solid fa-arrow-left"></i> VOLTAR AO CARRINHO
-            </a>
+        <div class="btn-return">
+            <a href="/carrinho"><i class="fa-solid fa-arrow-left"></i> VOLTAR AO CARRINHO</a>
         </div>
     </div>
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 <script>
-    const mp = new MercadoPago("TEST-a957ab76-06a5-461f-be48-c6d6d2bd7e10", { locale: 'pt-BR' });
+    const mp = new MercadoPago("APP_USR-1621538b-f0b4-4437-818f-6f5ec3f4e64c", { locale: 'pt-BR' });
     const bricksBuilder = mp.bricks();
 
     const renderPaymentBrick = async (bricksBuilder) => {
@@ -40,6 +36,9 @@
             initialization: {
                 amount: parseFloat("<%= totalGeral %>"),
                 preferenceId: "<%= preferenceId %>",
+                payer: {
+                    email: "<%= user.email %>",
+                },
             },
             customization: {
                 paymentMethods: {
@@ -50,14 +49,15 @@
                 visual: {
                     fontFamily: "'VT323', monospace",
                     style: { theme: 'dark' }
-                }
+                },
+                enableReviewStep: true,
             },
             callbacks: {
                 onReady: () => {
                     document.getElementById('loading-message').style.display = 'none';
                 },
                 onSubmit: ({ selectedPaymentMethod, formData }) => {
-                    console.log("DADOS ENVIADOS:", formData);
+                    console.log("DADOS QUE O BRICK ESTÁ GERANDO:", formData);
                     return new Promise((resolve, reject) => {
                         fetch("/pagamento/processar", {
                             method: "POST",
@@ -69,13 +69,17 @@
                             if (result.qr_code_base64) {
                                 document.getElementById('paymentBrick_container').style.display = 'none';
                                 document.getElementById('pixel-pix-container').style.display = 'block';
-                                
                                 document.getElementById('qr-code-img').innerHTML = `<img src="data:image/png;base64,${result.qr_code_base64}" style="width: 200px; display: block;">`;
                                 document.getElementById('pix-code').value = result.qr_code;
-                            } else if (result.status === 'approved') {
+
+                            }else if (result.transaction_details && result.transaction_details.external_resource_url) {
+                                window.location.href = result.transaction_details.external_resource_url;
+                            }
+                            else if (result.status === 'approved') {
                                 window.location.href = "/produtos?sucesso=true";
-                            } else {
-                                alert("Pagamento Pendente ou Recusado. Status: " + result.status);
+                            } 
+                            else {
+                                alert("Status do Pagamento: " + result.status + ". Detalhe: " + result.status_detail);
                                 window.location.href = "/produtos";
                             }
                             resolve();
