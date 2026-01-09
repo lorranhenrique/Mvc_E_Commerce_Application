@@ -39,6 +39,7 @@
                     </div>
                     <div class="detalhes-produto">
                         <h2 class="titulo-produto"><%= produto.nome %></h2>
+                        <p class="desc-produto"><%= produto.descricao %></p>
                         <p class="text-produto">Preço: <%= produto.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2}) %>R$</p>
                         <p class="text-produto">Estoque: <strong><%= produto.quantidade %></strong></p>
                     </div>
