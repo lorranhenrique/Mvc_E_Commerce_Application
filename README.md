@@ -99,7 +99,7 @@ JSON
 }
 ```
 
-##🕹️ Funcionamento do Sistema
+## 🕹️ Funcionamento do sistema
 
     Carrinho: O usuário adiciona os produtos desejados.
 
