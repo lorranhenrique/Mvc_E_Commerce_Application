@@ -34,11 +34,44 @@ npm install
 ```
 
 ### 3. Configuração do .env
+```bash
 accessToken=SEU_ACCESS_TOKEN_MERCADO_PAGO
 publicKey=SUA_PUBLIC_KEY_MERCADO_PAGO
 EMAIL_USER=seu-email@gmail.com
 EMAIL_PASS=sua-chave-de-aplicacao-google
 DB_URI=sua-string-de-conexao-mongodb-atlas
 JWT_SECRET=sua-chave-secreta-jwt
-
+```
 ### 4. Segurança e Webhooks
+SSL Local (mkcert):
+
+    Instale o mkcert.
+
+    Na raiz do projeto, execute: mkcert localhost.
+
+    Isso permitirá rodar a aplicação em https://localhost:3000.
+
+Túnel Externo (Ngrok):
+
+    O Mercado Pago precisa de uma URL pública para te avisar sobre os pagamentos.
+
+    Na pasta onde instalou o Ngrok, execute:
+    Bash
+
+    ngrok http https://localhost:3000
+
+    Copie a URL https gerada pelo Ngrok.
+
+Configuração no Mercado Pago:
+
+    Acesse seu Painel de Desenvolvedor no Mercado Pago.
+
+    Em Notificações > Webhooks, cole a URL do Ngrok seguida de /pagamento/webhook.
+
+    Exemplo: https://xxxx-xxx.ngrok-free.app/pagamento/webhook.
+
+    Selecione o evento Pagamentos (payments) e salve.
+
+
+
+
