@@ -9,6 +9,7 @@ const client = new MercadoPagoConfig({
 });
 
 const pagamentoIndex = async (req, res) => {
+    
     try {
         const itensCarrinho = req.session.carrinho || [];
         const produtosDetalhados = [];
@@ -29,11 +30,7 @@ const pagamentoIndex = async (req, res) => {
             });
         }
 
-        res.render('pagamento', {
-            path: "/pagamento",
-            carrinho: produtosDetalhados, 
-            totalGeral: totalGeral
-        });
+        res.render('pagamento', {path: "/pagamento", carrinho: produtosDetalhados, totalGeral: totalGeral});
 
     } catch (err) {
         console.error("Erro ao carregar resumo de pagamento:", err);
@@ -76,9 +73,7 @@ const efetuarPagamento = async (req, res) => {
         const preference = new Preference(client);
         const body = {
             items,
-            payer: {
-                email: userBD.email.toLowerCase().trim(),
-            },
+            payer: {email: userBD.email.toLowerCase().trim()},
             back_urls: {
                 success: `${req.protocol}://${req.get('host')}/produtos?status=success`,
                 failure: `${req.protocol}://${req.get('host')}/carrinho?status=failure`,
