@@ -52,6 +52,7 @@ app.use((req, res, next) => {
     res.locals.quantidadeCarrinho = total;
     next();
 });
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/produtos', produtosRouter);
