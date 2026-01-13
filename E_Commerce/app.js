@@ -29,7 +29,7 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-const dbURI = "mongodb+srv://lorrao:test1234@ecommercecluster.dgrvew8.mongodb.net/ECommerce?appName=EcommerceCluster";
+const dbURI = process.env.DB_URI;
 
 mongoose.connect(dbURI)
   .then((result) => console.log('connected to data base'))
